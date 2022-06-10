@@ -16,16 +16,16 @@ docker-compose logs -f --tail 50 dotnetapi
 
 ```bash
 
-curl -X GET "http://localhost:5000/api/message"
+curl --silent -X GET "http://localhost:5000/api/message" | jq
 
-curl -X GET "http://localhost:5000/api/message/1"
+curl --silent -X GET "http://localhost:5000/api/message/1" | jq
 
-curl -X GET "http://localhost:5000/api/message/count"
+curl --silent -X GET "http://localhost:5000/api/message/count" | jq
 
-curl -X POST "http://localhost:5000/api/message" -H "Content-type: application/json" --data-raw "{\"user_id\": 1, \"content\": \"Hello World\"}"
+curl --silent -X POST "http://localhost:5000/api/message" -H "Content-type: application/json" --data-raw "{\"user_id\": 1, \"content\": \"Hello World\"}" | jq
 
-curl -X PUT "http://localhost:5000/api/message/1" -H "Content-type: application/json" --data-raw "{\"user_id\": 2, \"content\": \"Hello World 2\"}"
+curl --silent -X PUT "http://localhost:5000/api/message/1" -H "Content-type: application/json" --data-raw "{\"user_id\": 2, \"content\": \"Hello World 2\"}" | jq
 
-curl -X DELETE "http://localhost:5000/api/message/1"
+curl --silent -X DELETE "http://localhost:5000/api/message/1" | jq
 
 ```

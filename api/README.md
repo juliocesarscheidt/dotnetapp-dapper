@@ -68,7 +68,7 @@ dotnet run --configuration Debug
 
 ## build for prod
 dotnet publish --configuration Release -r linux-x64
-dotnet publish -c release -r linux-x64 --self-contained false --no-restore
+dotnet publish --configuration release -r linux-x64 --self-contained false --no-restore
 
 dotnet publish --configuration release -r win10-x64
 

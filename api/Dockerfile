@@ -13,16 +13,11 @@ RUN dotnet restore -r linux-x64
 COPY . .
 RUN dotnet publish -c release -o /app -r linux-x64 --self-contained false --no-restore
 
-RUN ls -lth /app
-
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal-amd64
 
 WORKDIR /app
 COPY --from=build /app /app
-
-RUN ls -lth /app
-RUN ls -lth ./
 
 EXPOSE 5000
 EXPOSE 5001

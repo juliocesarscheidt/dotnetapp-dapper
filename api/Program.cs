@@ -1,23 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Data;
+using Api.Repository;
+using Api.Infra.Repository;
+using MySql.Data.MySqlClient; // MySqlConnection
 
-namespace Api
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+ConfigurationManager configuration = builder.Configuration;
+// Read the connection string from appsettings.
+string dbConnectionString = configuration.GetConnectionString("dbConnection");
+
+builder.Services.AddTransient<IDbConnection>((sp) => new MySqlConnection(dbConnectionString));
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>();
-    }
+    app.UseDeveloperExceptionPage();
 }
+
+// app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
