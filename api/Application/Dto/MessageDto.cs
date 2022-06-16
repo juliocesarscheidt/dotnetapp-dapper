@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Api.Dto
+namespace Api.Application.Dto
 {
     public class MessageDto
     {

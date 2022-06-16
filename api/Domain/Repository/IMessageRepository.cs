@@ -1,13 +1,12 @@
 using Dapper;
 using System.Data;
-// using System.Collections;
 using System.Collections.Generic;
 using System.Linq; // for ToList()
 
-using Api.Entity;
-using Api.Dto;
+using Api.Domain.Entity;
+using Api.Application.Dto;
 
-namespace Api.Infra.Repository
+namespace Api.Domain.Repository
 {
     public interface IMessageRepository
     {

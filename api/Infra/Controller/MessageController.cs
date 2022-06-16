@@ -4,21 +4,21 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-using Api.Entity;
-using Api.Dto;
-using Api.Infra.Repository;
+using Api.Domain.Entity;
+using Api.Application.Dto;
+using Api.Application.Service;
 
-namespace Api.Controller
+namespace Api.Infra.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private readonly IMessageRepository MessageRepository;
+        private readonly IMessageService MessageService;
 
-        public MessageController(IMessageRepository messageRepository)
+        public MessageController(IMessageService messageService)
         {
-            MessageRepository = messageRepository;
+            MessageService = messageService;
         }
 
         // GET api/message
@@ -27,27 +27,11 @@ namespace Api.Controller
         {
             Response.Headers.Add("Content-type", "application/json");
 
-            List<Message> messages = MessageRepository.findAll();
+            List<Message> messages = MessageService.FindAll();
             messages.ForEach(message => Console.WriteLine(message));
 
             HttpResponseDto response = new HttpResponseDto()
                 .setData(messages)
-                .setStatusCode(200);
-
-            return Ok(response);
-        }
-
-        // GET api/message/count
-        [HttpGet("count")]
-        public ActionResult<HttpResponseDto> Count()
-        {
-            Response.Headers.Add("Content-type", "application/json");
-
-            int count = MessageRepository.count();
-            Console.WriteLine(count);
-
-            HttpResponseDto response = new HttpResponseDto()
-                .setData(count)
                 .setStatusCode(200);
 
             return Ok(response);
@@ -60,7 +44,7 @@ namespace Api.Controller
             Console.WriteLine($"value => {id}");
             Response.Headers.Add("Content-type", "application/json");
 
-            Message message = MessageRepository.findOne(id);
+            Message message = MessageService.FindOne(id);
             Console.WriteLine(message);
 
             if (message == null) {
@@ -80,7 +64,7 @@ namespace Api.Controller
         {
             Response.Headers.Add("Content-type", "application/json");
 
-            int id = MessageRepository.create(dto);
+            int id = MessageService.Create(dto);
             Console.WriteLine($"value => {id}");
 
             HttpResponseDto response = new HttpResponseDto()
@@ -98,7 +82,7 @@ namespace Api.Controller
 
             Console.WriteLine($"value => {id}");
 
-            Message message = MessageRepository.update(id, dto);
+            Message message = MessageService.Update(id, dto);
             Console.WriteLine(message);
 
             HttpResponseDto response = new HttpResponseDto()
@@ -116,9 +100,25 @@ namespace Api.Controller
 
             Console.WriteLine($"value => {id}");
 
-            MessageRepository.delete(id);
+            MessageService.Delete(id);
 
             return NoContent();
+        }
+
+        // GET api/message/count
+        [HttpGet("count")]
+        public ActionResult<HttpResponseDto> Count()
+        {
+            Response.Headers.Add("Content-type", "application/json");
+
+            int count = MessageService.Count();
+            Console.WriteLine(count);
+
+            HttpResponseDto response = new HttpResponseDto()
+                .setData(count)
+                .setStatusCode(200);
+
+            return Ok(response);
         }
     }
 }

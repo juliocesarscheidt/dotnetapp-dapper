@@ -4,7 +4,7 @@ using Dapper.Contrib.Extensions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.Entity
+namespace Api.Domain.Entity
 {
     [Table("message")]
     public class Message

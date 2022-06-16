@@ -5,11 +5,11 @@ using System.Data;
 using System.Collections.Generic;
 using System.Linq; // for ToList()
 
-using Api.Entity;
-using Api.Dto;
-using Api.Infra.Repository;
+using Api.Domain.Entity;
+using Api.Application.Dto;
+using Api.Domain.Repository;
 
-namespace Api.Repository
+namespace Api.Infra.Repository
 {
     public class MessageRepository : IMessageRepository
     {
