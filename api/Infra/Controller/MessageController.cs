@@ -21,104 +21,97 @@ namespace Api.Infra.Controller
             MessageService = messageService;
         }
 
+        private ObjectResult throwInternalServerError(Exception e) {
+            Console.WriteLine(e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, e);
+        }
+
         // GET api/message
         [HttpGet]
-        public ActionResult<HttpResponseDto> FindAll()
+        public ActionResult<HttpResponseDto> findAll([FromQuery] int page = 0, [FromQuery] int size = 50)
         {
             Response.Headers.Add("Content-type", "application/json");
+            try {
+                List<Message> messages = MessageService.findAll(page, size);
+                int counter = MessageService.count();
 
-            List<Message> messages = MessageService.FindAll();
-            messages.ForEach(message => Console.WriteLine(message));
+                HttpResponseDto response = new HttpResponseDto()
+                    .setData(messages)
+                    .setMetadata(new {page = page, size = size, total = counter})
+                    .setStatusCode(StatusCodes.Status200OK);
+                return Ok(response);
 
-            HttpResponseDto response = new HttpResponseDto()
-                .setData(messages)
-                .setStatusCode(200);
-
-            return Ok(response);
+            } catch (Exception e) {
+                return this.throwInternalServerError(e);
+            }
         }
 
         // GET api/message/1
         [HttpGet("{id}")]
-        public ActionResult<HttpResponseDto> FindOne(int id)
+        public ActionResult<HttpResponseDto> findOne(int id)
         {
-            Console.WriteLine($"value => {id}");
             Response.Headers.Add("Content-type", "application/json");
+            try {
+                Message message = MessageService.findOne(id);
+                if (message == null) {
+                    return NotFound();
+                }
+                HttpResponseDto response = new HttpResponseDto()
+                    .setData(message)
+                    .setStatusCode(StatusCodes.Status200OK);
+                return Ok(response);
 
-            Message message = MessageService.FindOne(id);
-            Console.WriteLine(message);
-
-            if (message == null) {
-                return NotFound();
+            } catch (Exception e) {
+                return this.throwInternalServerError(e);
             }
-
-            HttpResponseDto response = new HttpResponseDto()
-                .setData(message)
-                .setStatusCode(200);
-
-            return Ok(response);
         }
 
         // POST api/message
         [HttpPost]
-        public ActionResult<HttpResponseDto> Create([FromBody] MessageDto dto)
+        public ActionResult<HttpResponseDto> create([FromBody] MessageDto dto)
         {
             Response.Headers.Add("Content-type", "application/json");
+            try {
+                int id = MessageService.create(dto);
+                HttpResponseDto response = new HttpResponseDto()
+                    .setData(id)
+                    .setStatusCode(StatusCodes.Status202Accepted);
+                return Accepted(response);
 
-            int id = MessageService.Create(dto);
-            Console.WriteLine($"value => {id}");
-
-            HttpResponseDto response = new HttpResponseDto()
-                .setData(id)
-                .setStatusCode(202);
-
-            return Accepted(response);
+            } catch (Exception e) {
+                return this.throwInternalServerError(e);
+            }
         }
 
         // PUT api/message/1
         [HttpPut("{id}")]
-        public ActionResult<HttpResponseDto> Update(int id, [FromBody] MessageDto dto)
+        public ActionResult<HttpResponseDto> update(int id, [FromBody] MessageDto dto)
         {
             Response.Headers.Add("Content-type", "application/json");
+            try {
+                Message message = MessageService.update(id, dto);
+                HttpResponseDto response = new HttpResponseDto()
+                    .setData(message)
+                    .setStatusCode(StatusCodes.Status202Accepted);
+                return Accepted(response);
 
-            Console.WriteLine($"value => {id}");
-
-            Message message = MessageService.Update(id, dto);
-            Console.WriteLine(message);
-
-            HttpResponseDto response = new HttpResponseDto()
-                .setData(message)
-                .setStatusCode(202);
-
-            return Accepted(response);
+            } catch (Exception e) {
+                return this.throwInternalServerError(e);
+            }
         }
 
         // DELETE api/message/1
         [HttpDelete("{id}")]
-        public ActionResult<HttpResponseDto> Delete(int id)
+        public ActionResult<HttpResponseDto> delete(int id)
         {
             Response.Headers.Add("Content-type", "application/json");
+            try {
+                MessageService.delete(id);
+                return NoContent();
 
-            Console.WriteLine($"value => {id}");
-
-            MessageService.Delete(id);
-
-            return NoContent();
-        }
-
-        // GET api/message/count
-        [HttpGet("count")]
-        public ActionResult<HttpResponseDto> Count()
-        {
-            Response.Headers.Add("Content-type", "application/json");
-
-            int count = MessageService.Count();
-            Console.WriteLine(count);
-
-            HttpResponseDto response = new HttpResponseDto()
-                .setData(count)
-                .setStatusCode(200);
-
-            return Ok(response);
+            } catch (Exception e) {
+                return this.throwInternalServerError(e);
+            }
         }
     }
 }

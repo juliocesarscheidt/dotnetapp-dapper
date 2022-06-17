@@ -19,15 +19,15 @@ namespace Api.Infra.Service
             MessageRepository = messageRepository;
         }
 
-        public List<Message> FindAll()
+        public List<Message> findAll(int page, int size)
         {
-            List<Message> messages = MessageRepository.findAll();
-            messages.ForEach(message => Console.WriteLine(message));
+            List<Message> messages = MessageRepository.findAll(page, size);
+            Console.WriteLine(messages);
 
             return messages;
         }
 
-        public Message FindOne(int id)
+        public Message findOne(int id)
         {
             Message message = MessageRepository.findOne(id);
             Console.WriteLine(message);
@@ -35,15 +35,15 @@ namespace Api.Infra.Service
             return message;
         }
 
-        public int Create(MessageDto dto)
+        public int create(MessageDto dto)
         {
             int id = MessageRepository.create(dto);
-            Console.WriteLine($"value => {id}");
+            Console.WriteLine(id);
 
             return id;
         }
 
-        public Message Update(int id, MessageDto dto)
+        public Message update(int id, MessageDto dto)
         {
             Message message = MessageRepository.update(id, dto);
             Console.WriteLine(message);
@@ -51,17 +51,17 @@ namespace Api.Infra.Service
             return message;
         }
 
-        public void Delete(int id)
+        public void delete(int id)
         {
             MessageRepository.delete(id);
         }
 
-        public int Count()
+        public int count()
         {
-            int count = MessageRepository.count();
-            Console.WriteLine(count);
+            int counter = MessageRepository.count();
+            Console.WriteLine(counter);
 
-            return count;
+            return counter;
         }
     }
 }

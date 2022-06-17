@@ -25,13 +25,19 @@ namespace Api.Infra.Repository
             DbConnection.Close();
         }
 
-        public List<Message> findAll()
+        public List<Message> findAll(int page, int size)
         {
-            const string sql = @"SELECT id, user_id, content, created_at, updated_at, deleted_at FROM message WHERE deleted_at IS @deleted_at";
+            const string sql = @"SELECT
+              id, user_id, content, created_at, updated_at, deleted_at
+              FROM message
+              WHERE deleted_at IS @deleted_at
+              ORDER BY id DESC LIMIT @limit OFFSET @offset";
             Console.WriteLine(sql);
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@deleted_at", null);
+            parameters.Add("@offset", (page * size));
+            parameters.Add("@limit", size);
 
             return DbConnection.Query<Message>(sql, parameters).ToList();
         }
@@ -57,16 +63,11 @@ namespace Api.Infra.Repository
             parameters.Add("@user_id", dto.user_id);
             parameters.Add("@content", dto.content);
 
-            var result = DbConnection.Execute(sql, parameters);
-            Console.WriteLine($"result {result}");
+            DbConnection.Execute(sql, parameters);
+            string sqlId = @"SELECT LAST_INSERT_ID();";
 
-            string sqlLastId = @"SELECT LAST_INSERT_ID();";
-            Console.WriteLine(sql);
-
-            int lastId = DbConnection.QueryFirstOrDefault<int>(sqlLastId);
-            Console.WriteLine($"lastId {lastId}");
-
-            return lastId;
+            int id = DbConnection.QueryFirstOrDefault<int>(sqlId);
+            return id;
         }
 
         public Message update(int id, MessageDto dto)
@@ -80,9 +81,7 @@ namespace Api.Infra.Repository
             parameters.Add("@id", id);
             parameters.Add("@deleted_at", null);
 
-            var result = DbConnection.Execute(sql, parameters);
-            Console.WriteLine($"result {result}");
-
+            DbConnection.Execute(sql, parameters);
             return this.findOne(id);
         }
 
@@ -95,23 +94,19 @@ namespace Api.Infra.Repository
             parameters.Add("@id", id);
             parameters.Add("@deleted_at", null);
 
-            var result = DbConnection.Execute(sql, parameters);
-            Console.WriteLine($"result {result}");
+            DbConnection.Execute(sql, parameters);
         }
 
         public int count()
         {
-            const string sql = @"SELECT COUNT(*) as row_count FROM message WHERE deleted_at IS @deleted_at";
+            const string sql = @"SELECT COUNT(id) as counter FROM message WHERE deleted_at IS @deleted_at";
             Console.WriteLine(sql);
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@deleted_at", null);
 
-            int result = DbConnection.QueryFirstOrDefault<int>(sql, parameters);
-
-            Console.WriteLine($"result {result}");
-
-            return result;
+            int counter = DbConnection.QueryFirstOrDefault<int>(sql, parameters);
+            return counter;
         }
     }
 }

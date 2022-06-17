@@ -64,6 +64,14 @@ export ASPNETCORE_URLS=http://0.0.0.0:5000
 dotnet run
 dotnet run --configuration Debug
 
+dotnet watch run
+
+
+dotnet test
+
+dotnet dev-certs
+
+
 
 
 ## build for prod

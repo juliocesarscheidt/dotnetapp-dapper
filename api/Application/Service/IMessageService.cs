@@ -11,16 +11,16 @@ namespace Api.Application.Service
 {
     public interface IMessageService
     {
-        List<Message> FindAll();
+        List<Message> findAll(int page, int size);
 
-        Message FindOne(int id);
+        Message findOne(int id);
 
-        int Create(MessageDto dto);
+        int create(MessageDto dto);
 
-        Message Update(int id, MessageDto dto);
+        Message update(int id, MessageDto dto);
 
-        void Delete(int id);
+        void delete(int id);
 
-        int Count();
+        int count();
     }
 }

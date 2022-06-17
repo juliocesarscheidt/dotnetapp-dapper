@@ -12,7 +12,7 @@ namespace Api.Domain.Repository
     {
         void Dispose();
 
-        List<Message> findAll();
+        List<Message> findAll(int page, int size);
 
         Message findOne(int id);
 
