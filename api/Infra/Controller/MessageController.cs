@@ -16,9 +16,9 @@ namespace Api.Infra.Controller
     {
         private readonly IMessageService MessageService;
 
-        public MessageController(IMessageService messageService)
+        public MessageController(IMessageService _messageService)
         {
-            MessageService = messageService;
+            MessageService = _messageService;
         }
 
         private ObjectResult throwInternalServerError(Exception e) {

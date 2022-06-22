@@ -14,9 +14,9 @@ namespace Api.Infra.Service
     {
         private readonly IMessageRepository MessageRepository;
 
-        public MessageService(IMessageRepository messageRepository)
+        public MessageService(IMessageRepository _messageRepository)
         {
-            MessageRepository = messageRepository;
+            MessageRepository = _messageRepository;
         }
 
         public List<Message> findAll(int page, int size)

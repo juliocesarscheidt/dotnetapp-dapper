@@ -15,9 +15,9 @@ namespace Api.Infra.Repository
     {
         private readonly IDbConnection DbConnection;
 
-        public MessageRepository(IDbConnection dbConnection)
+        public MessageRepository(IDbConnection _dbConnection)
         {
-            DbConnection = dbConnection;
+            DbConnection = _dbConnection;
         }
 
         public void Dispose()
