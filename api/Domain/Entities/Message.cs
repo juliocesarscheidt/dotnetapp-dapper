@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using Dapper.Contrib.Extensions;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Api.Domain.Entity

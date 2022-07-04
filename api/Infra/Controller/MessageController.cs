@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 
 using Api.Domain.Entity;
 using Api.Application.Dto;

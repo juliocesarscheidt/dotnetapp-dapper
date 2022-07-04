@@ -1,9 +1,5 @@
 using Dapper;
-using System;
 using System.Data;
-
-using System.Collections.Generic;
-using System.Linq; // for ToList()
 
 using Api.Domain.Entity;
 using Api.Application.Dto;
@@ -28,10 +24,13 @@ namespace Api.Infra.Repository
         public List<Message> findAll(int page, int size)
         {
             const string sql = @"SELECT
-              id, user_id, content, created_at, updated_at, deleted_at
-              FROM message
-              WHERE deleted_at IS @deleted_at
-              ORDER BY id DESC LIMIT @limit OFFSET @offset";
+                                  id, user_id, content, created_at, updated_at, deleted_at
+                                FROM
+                                  message
+                                WHERE
+                                  deleted_at IS @deleted_at
+                                ORDER BY id DESC
+                                LIMIT @limit OFFSET @offset";
             Console.WriteLine(sql);
 
             DynamicParameters parameters = new DynamicParameters();
@@ -44,7 +43,13 @@ namespace Api.Infra.Repository
 
         public Message findOne(int id)
         {
-            const string sql = @"SELECT id, user_id, content, created_at, updated_at, deleted_at FROM message WHERE id = @id AND deleted_at IS @deleted_at";
+            const string sql = @"SELECT
+                                  id, user_id, content, created_at, updated_at, deleted_at
+                                FROM
+                                  message
+                                WHERE
+                                  id = @id AND deleted_at IS @deleted_at
+                                LIMIT 1";
             Console.WriteLine(sql);
 
             DynamicParameters parameters = new DynamicParameters();

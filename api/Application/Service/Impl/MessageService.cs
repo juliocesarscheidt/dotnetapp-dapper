@@ -1,14 +1,8 @@
-using System;
-using System.Net;
-using System.Linq;
-using System.Collections.Generic;
-
 using Api.Domain.Entity;
 using Api.Domain.Repository;
 using Api.Application.Dto;
-using Api.Application.Service;
 
-namespace Api.Infra.Service
+namespace Api.Application.Service.Impl
 {
     public class MessageService : IMessageService
     {

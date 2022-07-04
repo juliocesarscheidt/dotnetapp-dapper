@@ -6,7 +6,7 @@ using Api.Domain.Repository;
 using Api.Application.Service;
 
 using Api.Infra.Repository;
-using Api.Infra.Service;
+using Api.Application.Service.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
